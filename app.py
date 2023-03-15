@@ -6,7 +6,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from numpy.fft import fft, fftshift
+from numpy.fft import fft
+import arduino as a
 
 root = tk.Tk()
 
@@ -36,12 +37,31 @@ def getCSV():
 # Add a command to the "File" menu to import a CSV file
 file_menu.add_command(label="Import CSV File", command=getCSV)
 
+def applyFourierTransform():
+    # Get the time and signal data from the DataFrame
+    time = df.iloc[:, 0]
+    signal = df.iloc[:, 1]
+
+    # Apply the Fourier Transform to the signal data
+    fourier_transform = fft(signal)
+
+    # Shift the zero-frequency component to the center of the spectrum
+    fourier_transform_shifted = np.fft.fftshift(fourier_transform)
+
+    # Calculate the frequencies for each element in the Fourier Transform
+    sample_rate = 1 / (time[1] - time[0])
+    frequencies = fft.fftfreq(len(fourier_transform), d=1/sample_rate)
+    frequencies_shifted = fft.fftshift(frequencies)
+
+    return frequencies_shifted, fourier_transform_shifted
+
 def plotData():
+    frequencies, fourier_transform = applyFourierTransform()
     figure1 = plt.Figure(figsize=(3,3), dpi=100)
     ax1 = figure1.add_subplot(111)
 
     # Plot the real part of the Fourier transform
-    ax1.plot(df[df.columns[0]], df[df.columns[1]])
+    ax1.plot(df.iloc[:, 0], abs(fourier_transform))
     ax1.set_title('Real Part')
     linePlot1 = FigureCanvasTkAgg(figure1, root)
     linePlot1.get_tk_widget().place(relx=0.2, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
@@ -50,53 +70,18 @@ def plotData():
     ax2 = figure2.add_subplot(111)
 
     # Plot the frequency spectrum of the Fourier transform
-    freqs = np.fft.fftfreq(len(df[df.columns[0]]), d=0.1)
-    ax2.stem(freqs, np.abs(df[df.columns[2]]))
+    ax2.stem(frequencies, np.abs(df[df.columns[2]]))
     ax2.set_title('Frequency Spectrum')
     linePlot2 = FigureCanvasTkAgg(figure2, root)
     linePlot2.get_tk_widget().place(relx=0.5, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
 
-    figure3 = plt.Figure(figsize=(3,3), dpi=100)
-    ax3 = figure3.add_subplot(111)
-
-    # Plot the phase spectrum of the Fourier transform
-    phase_spectrum = np.angle(df[df.columns[2]])
-    ax3.stem(freqs, phase_spectrum)
-    ax3.set_title('Phase Spectrum')
-    linePlot3 = FigureCanvasTkAgg(figure3, root)
-    linePlot3.get_tk_widget().place(relx=0.8, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
-
 file_menu.add_command(label="Plot data", command=plotData)
 
 def createCSV():
-    # Define rect(x) function
-    def rect(x):
-        return np.where(abs(x) < 0.5, 1, 0)
-    
-    # Create an array from 0 to 10 with step size of 0.1
-    x = np.arange(0, 10, 0.1)
-    
-    # Apply rect(x) function to each element of x
-    result = [rect(i) for i in x]
-    
-    # Compute Fourier transform of result
-    fourier_result = fft(result)
-    
-    # Apply Fourier shift to fourier_result
-    shifted_fourier_result = fftshift(fourier_result)
-    shifted_fourier_result = abs(shifted_fourier_result)
-    
-    # Create a new DataFrame with the shifted Fourier transform result and save it as a CSV file
-    result_df = pd.DataFrame(shifted_fourier_result)
-    result_df.to_csv("rect_shifted_fourier_transform.csv", index=False)
-    
-    # Create success window
-    success_window = tk.Toplevel(root)
-    success_window.title("Success")
-    
-    success_label = tk.Label(success_window, text="CSV file created successfully!")
-    success_label.pack()
+    a.read('data.csv')
+    messagebox.showinfo("Success", "Patient data read successfully")
+       
 
-file_menu.add_command(label="Create CSV File", command=createCSV)
+file_menu.add_command(label="Record patient data", command=createCSV)
 
 root.mainloop()
