@@ -6,13 +6,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from numpy.fft import fft
 import arduino as a
 
 root = tk.Tk()
 
 root.title("Essential Tremor Analysis")
-root.state('zoomed')
+root.wm_attributes('-zoomed', True)
 
 canvas1 = tk.Canvas(root)
 canvas1.pack(fill=tk.BOTH, expand=True)
@@ -43,17 +42,16 @@ def applyFourierTransform():
     signal = df.iloc[:, 1]
 
     # Apply the Fourier Transform to the signal data
-    fourier_transform = fft(signal)
+    fourier_transform = np.fft.fft(signal)
 
     # Shift the zero-frequency component to the center of the spectrum
     fourier_transform_shifted = np.fft.fftshift(fourier_transform)
 
     # Calculate the frequencies for each element in the Fourier Transform
     sample_rate = 1 / (time[1] - time[0])
-    frequencies = fft.fftfreq(len(fourier_transform), d=1/sample_rate)
-    frequencies_shifted = fft.fftshift(frequencies)
+    frequencies = np.fft.fftfreq(len(fourier_transform), d=1/sample_rate)
 
-    return frequencies_shifted, fourier_transform_shifted
+    return frequencies, fourier_transform_shifted
 
 def plotData():
     frequencies, fourier_transform = applyFourierTransform()
@@ -61,19 +59,11 @@ def plotData():
     ax1 = figure1.add_subplot(111)
 
     # Plot the real part of the Fourier transform
-    ax1.plot(df.iloc[:, 0], abs(fourier_transform))
-    ax1.set_title('Real Part')
+    ax1.stem(np.fft.fftshift(frequencies), abs(fourier_transform))
+    ax1.set_title('frequency spectra')
     linePlot1 = FigureCanvasTkAgg(figure1, root)
     linePlot1.get_tk_widget().place(relx=0.2, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
 
-    figure2 = plt.Figure(figsize=(3,3), dpi=100)
-    ax2 = figure2.add_subplot(111)
-
-    # Plot the frequency spectrum of the Fourier transform
-    ax2.stem(frequencies, np.abs(df[df.columns[2]]))
-    ax2.set_title('Frequency Spectrum')
-    linePlot2 = FigureCanvasTkAgg(figure2, root)
-    linePlot2.get_tk_widget().place(relx=0.5, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
 
 file_menu.add_command(label="Plot data", command=plotData)
 
