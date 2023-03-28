@@ -21,3 +21,8 @@ with open('accelerometer.csv', 'w', newline='') as csvfile: # replace with your 
         writer.writerow([x, y, z])
         # Wait for a short time to avoid overloading the serial port
         time.sleep(0.1)
+
+#Pmod ACL2 VCC -> Arduino 5V
+#Pmod ACL2 GND -> Arduino GND
+#Pmod ACL2 SDA -> Arduino A4 (SDA)
+#Pmod ACL2 SCL -> Arduino A5 (SCL)
