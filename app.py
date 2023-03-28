@@ -11,7 +11,7 @@ import arduino as a
 root = tk.Tk()
 
 root.title("Essential Tremor Analysis")
-root.wm_attributes('-zoomed', True)
+root.state('zoomed')
 
 canvas1 = tk.Canvas(root)
 canvas1.pack(fill=tk.BOTH, expand=True)
