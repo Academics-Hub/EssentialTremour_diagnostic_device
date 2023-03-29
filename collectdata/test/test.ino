@@ -58,5 +58,5 @@ void loop()
   Serial.println(t);
 
   //wait 0.5s before next aquisition
-  delay(500);
+  delay(1);
 }
