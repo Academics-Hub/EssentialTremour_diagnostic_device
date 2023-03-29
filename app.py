@@ -55,15 +55,21 @@ def applyFourierTransform():
 
 def plotData():
     frequencies, fourier_transform = applyFourierTransform()
-    figure1 = plt.Figure(figsize=(3,3), dpi=100)
-    ax1 = figure1.add_subplot(111)
+    figure1 = plt.Figure(figsize=(5,5), dpi=100)
+    figure2 = plt.Figure(figsize=(5,5), dpi=100)
+    ax1 = figure1.add_subplot(1, 1, 1)
+    ax2 = figure2.add_subplot(1, 1, 1)
 
-    # Plot the real part of the Fourier transform
-    ax1.stem(np.fft.fftshift(frequencies), abs(fourier_transform))
-    ax1.set_title('frequency spectra')
+    # plot original signal
+    ax1.plot(df.iloc[:, 0], df.iloc[:, 1])
+    ax1.set_title('original signal')
     linePlot1 = FigureCanvasTkAgg(figure1, root)
-    linePlot1.get_tk_widget().place(relx=0.2, rely=0.2, anchor=tk.CENTER, relwidth=0.3, relheight=0.3)
-
+    linePlot1.get_tk_widget().place(relx=0.3, rely=0.3, anchor=tk.CENTER, relwidth=0.4, relheight=0.5)
+    # Plot the real part of the Fourier transform
+    ax2.stem(np.fft.fftshift(frequencies), abs(fourier_transform))
+    ax2.set_title('frequency spectra')
+    linePlot2 = FigureCanvasTkAgg(figure2, root)
+    linePlot2.get_tk_widget().place(relx=0.7, rely=0.3, anchor=tk.CENTER, relwidth=0.4, relheight=0.5)
 
 file_menu.add_command(label="Plot data", command=plotData)
 
