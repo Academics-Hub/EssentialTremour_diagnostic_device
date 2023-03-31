@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css';
 
 function ContentList () {
     return (
@@ -18,17 +19,11 @@ function ContentList () {
     )
 }
 
-function ReactLogo () {
-    return (
-            <img src={require("./react-logo.png")} alt="React logo" width="80px" height="80px"/>
-    )
-}
-
 function Header () {
     return (
         <header>
-            <nav className='Header'>
-                <font size="8"><h1> <ReactLogo /> REACT INFO SITE </h1></font> 
+            <nav class='Header'>
+                <font size="8"><h1> Essential Tremour Diagnostic </h1></font> 
             </nav>
         </header>
     )
@@ -46,7 +41,7 @@ function Footer () {
 
 function Page () {
     return (
-        <div>
+        <div class='background'>
             <Header />   
             <ContentList />
             <Footer />

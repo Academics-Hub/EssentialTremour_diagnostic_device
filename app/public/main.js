@@ -3,19 +3,18 @@ const { app, BrowserWindow } = require('electron')
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
+    title: "Essential Tremour Diagnostic",
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule:true
+        nodeIntegration: true
     }
-  })
-  // load HTML file via url
-  //win.loadURL('https://www.electronjs.org/')
+})
 
+    win.removeMenu();
   //load the index.html from a url
   win.loadURL('http://localhost:3000');
-  win.removeMenu();
+
   // Open the DevTools.
   // win.webContents.openDevTools()
 }
