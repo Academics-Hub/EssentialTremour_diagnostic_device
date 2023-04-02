@@ -17,7 +17,7 @@ def read(filename):
         t = 0
         while timer >= 0:
             #data = ser.readline().decode().strip()
-            data=2*math.sin(t)+2*math.cos(2*t)+2*math.sin(3*t)+2*math.cos(4*t)
+            data=math.sinh(t)+math.cosh(t)
             writer.writerow([t, data])
             timer -= 0.1
             t += 0.1
