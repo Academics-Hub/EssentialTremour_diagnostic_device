@@ -6,6 +6,11 @@ import tkinter as tk
 from tkinter import messagebox
 
 def read(filename):
+    """Read patient data from the Arduino and store it in a CSV file
+
+    Args:
+        filename (.csv): The name of the CSV file to store the patient data
+    """
     #ser = serial.Serial('/dev/ttyACM0', 9600)
     time.sleep(1)
 

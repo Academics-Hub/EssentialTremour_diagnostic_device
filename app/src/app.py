@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import arduino as a
+import app.src.arduino as a
 
 root = tk.Tk()
 
@@ -23,7 +23,10 @@ root.config(menu=menu_bar)
 file_menu = tk.Menu(menu_bar, tearoff=0)
 menu_bar.add_cascade(label="Menu", menu=file_menu)
 
+
 def getCSV():
+    """Import a CSV file into a DataFrame
+    """
     global df
     import_file_path = filedialog.askopenfilename()
     df = pd.read_csv(import_file_path)
@@ -33,9 +36,15 @@ def getCSV():
     messagebox.showinfo("Success", "CSV file imported successfully")
 
 # Add a command to the "File" menu to import a CSV file
+
 file_menu.add_command(label="Import CSV File", command=getCSV)
 
 def applyFourierTransform():
+    """Apply the Fourier Transform to the signal data
+
+    Returns:
+        pandas.dataframe: frequencies and fourier_transform_shifted
+    """
     # Get the time and signal data from the DataFrame
     time = df.iloc[:, 0]
     signal = df.iloc[:, 1]
@@ -53,6 +62,8 @@ def applyFourierTransform():
     return frequencies, fourier_transform_shifted
 
 def plotData():
+    """Plot the signal data and the frequency spectra   
+    """
     frequencies, fourier_transform = applyFourierTransform()
     figure1 = plt.Figure(figsize=(3,3), dpi=100)
     ax1 = figure1.add_subplot(111)
@@ -67,6 +78,8 @@ def plotData():
 file_menu.add_command(label="Plot data", command=plotData)
 
 def createCSV():
+    """Create a CSV file to store patient data
+    """
     a.read('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")
        
