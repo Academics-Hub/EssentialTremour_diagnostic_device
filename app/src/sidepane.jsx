@@ -9,7 +9,7 @@ function SidePane() {
                 (
                     <button className={`w-10 h-10 hover:bg-slate-600 hover:rounded-full ${RevealPaneButtonState(showSidePane)}`} onClick={() => setShowSidePane(!showSidePane)}>
                         <h1 className="text-white">
-                            &gt;&gt;
+                            &lt;&lt;
                         </h1>
                     </button>
                 )
@@ -17,7 +17,7 @@ function SidePane() {
                 (
                     <button className={`w-10 h-10 hover:bg-slate-600 hover:rounded-full ${RevealPaneButtonState(!showSidePane)}`} onClick={() => setShowSidePane(!showSidePane)}>
                         <h1 className="text-white">
-                            &lt;&lt;
+                            &gt;&gt;
                         </h1>
                     </button>
                 ) 
@@ -40,9 +40,9 @@ function RevealPaneButtonState (state) {
 }
 function PaneVisiblity (state) {
     if (state) {
-        return "hidden"
-    } else {
         return "flex basis-1/4"
+    } else {
+        return "hidden"
     }
 }
 
