@@ -36,6 +36,7 @@ def getCSV():
 # Add a command to the "File" menu to import a CSV file
 file_menu.add_command(label="Import CSV File", command=getCSV)
 
+
 def applyFourierTransform():
     # Get the time and signal data from the DataFrame
     time = df.iloc[:, 0]
@@ -73,11 +74,13 @@ def plotData():
 
 file_menu.add_command(label="Plot data", command=plotData)
 
-def createCSV():
+def patientData():
     a.read('data.csv')
+    df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")
+    plotData()
        
 
-file_menu.add_command(label="Record patient data", command=createCSV)
+file_menu.add_command(label="Record patient data", command=patientData)
 
 root.mainloop()

@@ -1,3 +1,7 @@
+#include <Nano33BLE_System.h>
+
+#include <SPI.h>
+
 /************************************************************************
 
   Test of Pmod ACL2
@@ -26,7 +30,7 @@
 
 ************************************************************************/
 
-#define CS 10 //chip select pin
+#define CS 9 //chip select pin
 
 // Call of libraries
 #include <SPI.h>
@@ -44,7 +48,7 @@ void setup(void)
 void loop()
 {
   // Acquisition of accelerometer data
-  int x, y, z, t;
+  int16_t x, y, z, t;
   accelerometer.readXYZTData(x, y, z, t);
 
   //display raw data

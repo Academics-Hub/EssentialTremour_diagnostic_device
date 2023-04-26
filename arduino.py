@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 def read(filename):
-    #ser = serial.Serial('/dev/ttyACM0', 9600)
+    ser = serial.Serial('/dev/ttyACM0', 9600)
     time.sleep(1)
 
     timer = 10
@@ -16,8 +16,8 @@ def read(filename):
         writer = csv.writer(f)
         t = 0
         while timer >= 0:
-            #data = ser.readline().decode().strip()
-            data=2*math.sin(t)+2*math.cos(2*t)+2*math.sin(3*t)+2*math.cos(4*t)
+            data = ser.readline().decode().strip()
+            #data=2*math.sin(t)+2*math.cos(2*t)+2*math.sin(3*t)+2*math.cos(4*t)
             writer.writerow([t, data])
             timer -= 0.1
             t += 0.1
