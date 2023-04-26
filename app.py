@@ -28,19 +28,18 @@ def getCSV():
     global df
     import_file_path = filedialog.askopenfilename()
     df = pd.read_csv(import_file_path)
-    print(df)
 
     # Display a success message after importing the CSV file
     messagebox.showinfo("Success", "CSV file imported successfully")
+    plotData()
 
 # Add a command to the "File" menu to import a CSV file
-file_menu.add_command(label="Import CSV File", command=getCSV)
+file_menu.add_command(label="Import CSV File and plot data", command=getCSV)
 
 
 def applyFourierTransform():
     # Get the time and signal data from the DataFrame
-    time = df.iloc[:, 0]
-    signal = df.iloc[:, 1]
+    signal = df.iloc[:, 0]
 
     # Apply the Fourier Transform to the signal data
     fourier_transform = np.fft.fft(signal)
@@ -49,10 +48,9 @@ def applyFourierTransform():
     fourier_transform_shifted = np.fft.fftshift(fourier_transform)
 
     # Calculate the frequencies for each element in the Fourier Transform
-    sample_rate = 1 / (time[1] - time[0])
-    frequencies = np.fft.fftfreq(len(fourier_transform), d=1/sample_rate)
+    frequencies = np.fft.fftfreq(fourier_transform_shifted.size)
 
-    return frequencies, fourier_transform_shifted
+    return np.fft.fftshift(frequencies), fourier_transform_shifted
 
 def plotData():
     frequencies, fourier_transform = applyFourierTransform()
@@ -62,12 +60,14 @@ def plotData():
     ax2 = figure2.add_subplot(1, 1, 1)
 
     # plot original signal
-    ax1.plot(df.iloc[:, 0], df.iloc[:, 1])
+    ax1.plot(np.arange(len(df.iloc[:, 0])), df.iloc[:, 0])
     ax1.set_title('original signal')
+    ax1.set_xlabel('time (10s)')
+    ax1.set_xticks([])
     linePlot1 = FigureCanvasTkAgg(figure1, root)
     linePlot1.get_tk_widget().place(relx=0.3, rely=0.3, anchor=tk.CENTER, relwidth=0.4, relheight=0.5)
     # Plot the real part of the Fourier transform
-    ax2.stem(np.fft.fftshift(frequencies), abs(fourier_transform))
+    ax2.plot(frequencies, abs(fourier_transform))
     ax2.set_title('frequency spectra')
     linePlot2 = FigureCanvasTkAgg(figure2, root)
     linePlot2.get_tk_widget().place(relx=0.7, rely=0.3, anchor=tk.CENTER, relwidth=0.4, relheight=0.5)
@@ -75,6 +75,7 @@ def plotData():
 file_menu.add_command(label="Plot data", command=plotData)
 
 def patientData():
+    global df
     a.read('data.csv')
     df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")

@@ -25,12 +25,12 @@
   MOSI    to        12 (MOSI)
   MISO    to        11 (MIS0)
   CS      to        10
-
+    time.sleep(0.001)
   a logic level converter must be used!!!
 
 ************************************************************************/
 
-#define CS 9 //chip select pin
+#define CS 10 //chip select pin
 
 // Call of libraries
 #include <SPI.h>
@@ -52,15 +52,8 @@ void loop()
   accelerometer.readXYZTData(x, y, z, t);
 
   //display raw data
-  Serial.print("x = ");
-  Serial.print(x);
-  Serial.print("\t y = ");
-  Serial.print(y);
-  Serial.print("\t z = ");
-  Serial.print(z);
-  Serial.print("\t t = ");
-  Serial.println(t);
+  Serial.println(z);
 
   //wait 0.5s before next aquisition
-  delay(1);
+  delay(100);
 }

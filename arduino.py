@@ -1,26 +1,30 @@
 import serial
-import time
+from datetime import datetime
 import csv
-import math
 import tkinter as tk
 from tkinter import messagebox
+import numpy as np
+import time as ti
 
 def read(filename):
     ser = serial.Serial('/dev/ttyACM0', 9600)
-    time.sleep(1)
+    #print(t1)
 
     timer = 10
     messagebox.showinfo("Please wait", "Reading patient data for " + str(timer) + " seconds")
 
+    t1 = datetime.now()
+    data = []
     with open(filename, 'w') as f:
         writer = csv.writer(f)
-        t = 0
-        while timer >= 0:
-            data = ser.readline().decode().strip()
-            #data=2*math.sin(t)+2*math.cos(2*t)+2*math.sin(3*t)+2*math.cos(4*t)
-            writer.writerow([t, data])
-            timer -= 0.1
-            t += 0.1
-            time.sleep(0.1)
-            print(timer)
+        while True:
+            if (datetime.now() - t1).seconds > timer:
+                break
+            temp = ser.readline().decode().strip()
+            data.append(int(temp))
+        
+        for i in range(len(data)):
+            writer.writerow([data[i]])
+
+    ser.close()
     
