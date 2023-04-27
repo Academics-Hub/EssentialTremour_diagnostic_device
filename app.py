@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import arduino as a
+from tkinter import Label
+import time
 
 root = tk.Tk()
 
@@ -74,13 +76,26 @@ def plotData():
 
 file_menu.add_command(label="Plot data", command=plotData)
 
+def countdown(count, label):
+    label['text'] = count
+    if count > 0:
+        root.after(1000, countdown, count-1)
+        
 def patientData():
+    timer = 10
     global df
-    a.read('data.csv')
+    arduino = a.arduino('/dev/ttyACM0', 9600)
+    arduino.read('data.csv', timer)
     df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")
     plotData()
-       
+    
+    timer_window = tk.Toplevel(root)
+    timer_window.geometry("200x100")      
+    label = tk.Label(timer_window, text="Please wait while patient data is read")
+    label.pack()
+    
+    countdown(timer, label)
 
 file_menu.add_command(label="Record patient data", command=patientData)
 
