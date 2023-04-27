@@ -8,7 +8,12 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
-    fullscreen: true,
+    movable: true,
+    minimizable: true,
+    maximizable: true,
+    closable: true,
+    focusable: true,
+    fullscreen: false,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),

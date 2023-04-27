@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './index.css'
+import * as fs from 'node:fs/promises'
 
 function SidePane () {
     const [showSidePane, setShowSidePane] = React.useState(false)
@@ -10,16 +11,14 @@ function SidePane () {
                     <h1 className='truncate basis-5/6 text-white text-left ml-1 '>
                         Imported Files
                     </h1>
-                    <button className={`text-right w-6 h-6 hover:rounded-full hover:animate-pulse ${RevealPaneButtonState(showSidePane)}`} onClick={() => (setShowSidePane(!showSidePane)) }>
+                    <button className={`absolute right-0 mr-1 text-right w-6 h-6 hover:rounded-full hover:animate-pulse ${RevealPaneButtonState(showSidePane)}`} onClick={() => (setShowSidePane(!showSidePane)) }>
                         <h1 className="text-white font-semibold ">
                             &lt;&lt;
                         </h1>
                     </button>
                 </div>
                 <div className='truncate static pt-7 mx-2'>
-                    <ul>1</ul>
-                    <ul>2</ul>
-                    <ul>3</ul>
+                    <Folder files='./'/>
                 </div>
             </div>
             <div className={`w-fit h-fit rounded-lg ease-in-out duration-300`}>
@@ -49,5 +48,40 @@ function SidePane () {
         }
     }
 }
+
+class Folder extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      files: [],
+    };
+  }
+
+  componentDidMount() {
+    const folderPath = './';
+    fs.readdir(folderPath, (err, files) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      this.setState({ files });
+    });
+  }
+
+  render() {
+    const { files } = this.state;
+    return (
+      <div>
+        <h1>Folder Contents</h1>
+        <ul>
+          {files.map((file) => (
+            <li key={file}>{file}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
 
 export default SidePane

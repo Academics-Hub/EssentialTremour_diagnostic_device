@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",
-    "@electron-toolkit/utils": "^1.0.2"
+    "@electron-toolkit/utils": "^1.0.2",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
