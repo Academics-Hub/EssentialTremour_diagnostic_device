@@ -106,7 +106,7 @@ def patientData():
     arduino.read('data.csv', timer)
     df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")
-    plotData()
+    plotData(timer)
     
     timer_window = tk.Toplevel(root)
     timer_window.geometry("200x100")      
