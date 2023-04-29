@@ -3,7 +3,7 @@ import csv
 import time
 
 # Initialize serial communication with the Arduino Uno
-ser = serial.Serial('COM3', 9600) # replace with your serial port and baud rate
+ser = serial.Serial('/dev/tty.usbmodem1101', 9600) # replace with your serial port and baud rate
 
 # Create a CSV file and write the header row
 with open('accelerometer.csv', 'w', newline='') as csvfile: # replace with your desired filename

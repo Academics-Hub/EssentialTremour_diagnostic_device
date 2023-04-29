@@ -102,7 +102,7 @@ def countdown(count, label):
 def patientData():
     timer = 10
     global df
-    arduino = a.arduino('/dev/ttyACM0', 9600)
+    arduino = a.arduino('/dev/tty.usbmodem1101', 9600)
     arduino.read('data.csv', timer)
     df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")

@@ -1,7 +1,7 @@
 #include <Wire.h>
-#include </home/jono/EssentialTremour_diagnostic_device/collectdata/ACL2.h>
+#include <ADXL362.h>
 
-ACL2 accel;
+ADXL362 accel;
 
 unsigned long startTime; // variable to store the start time
 
@@ -24,6 +24,3 @@ void loop() {
   Serial.println(event.acceleration.x);
   delay(10);
 }
-
-
-
