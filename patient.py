@@ -44,12 +44,12 @@ class Patient:
         timerLabel.config(height=4)
         timerLabel.pack()
         countdown_thread = threading.Thread(target=self.__countdown, args=(timerLabel, root))
-        #recording_thread = threading.Thread(target=self.__record, args=())
+        recording_thread = threading.Thread(target=self.__record, args=())
         countdown_thread.start()
-        #recording_thread.start()
+        recording_thread.start()
         root.mainloop()
         countdown_thread.join()
-        #recording_thread.join()
+        recording_thread.join()
     
     def recordPatient(self):
         root = tkinter.Tk()
