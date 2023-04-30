@@ -37,7 +37,7 @@ class patient:
         self.__recordingTimer()
         
     def __recordingTimer(self):
-        root = tkinter.tkinter()
+        root = tkinter.Tk()
         root.title("Recording Patient Data")
         root.geometry = ("100x100")
         timerLabel = tkinter.Label(root, text="0")
@@ -55,7 +55,7 @@ class patient:
         recording_thread.join()
     
     def recordPatient(self):
-        root = tkinter.tkinter()
+        root = tkinter.Tk()
         root.title("Recording Time")
         root.geometry = ("100x200")
         query = tkinter.Label(root, text="How long would you like to record data for (seconds)?")

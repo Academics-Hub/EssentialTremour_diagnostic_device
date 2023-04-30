@@ -52,7 +52,7 @@ void loop()
   accelerometer.readXYZTData(x, y, z, t);
 
   //display raw data
-  Serial.println(z);
+  Serial.println(y);
 
   //wait 0.5s before next aquisition
   delay(100);
