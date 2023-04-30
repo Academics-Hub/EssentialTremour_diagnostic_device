@@ -5,7 +5,7 @@ import csvHandling
 
 root = tkinter.Tk()
 root.title("Essential Tremor Analysis")
-plot_canvas = tkinter.Canvas(root)
+plot_canvas = tkinter.Canvas(root,border=0)
 analysis_canvas = tkinter.Canvas(root)
 def getCSV():
     file = tkinter.filedialog.askopenfilename()
