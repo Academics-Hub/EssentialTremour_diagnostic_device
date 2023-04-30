@@ -2,7 +2,6 @@ import serial
 from datetime import datetime
 import csv
 import tkinter as tk
-
 from tkinter import messagebox
 import numpy as np
 import time
