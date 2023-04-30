@@ -2,23 +2,24 @@ import tkinter
 import pandas
 import recordPatient
 import plot
+import csvHandling
 
 root = tkinter.Tk()
 root.title("Essential Tremor Analysis")
 
 def getCSV():
-    global data
-    import_file_path = tkinter.filedialog.askopenfilename()
-    data = pandas.read_csv(import_file_path)
-    tkinter.messagebox.showinfo("Success", "CSV file imported successfully")
-    patientPlot = plot.Plot(plot_canvas, data)
+    file = tkinter.filedialog.askopenfilename()
+    csv = csvHandling.Csv(file)
+    data = csv.read()
+    patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())
     patientPlot.createPatientPlot()
 
 def patientRecordOnClick():
     patient = recordPatient.patient("test")
     patient.recordPatient()
-    patientPlot = plot.Plot(plot_canvas, data)
+    patientPlot = plot.Plot(plot_canvas, patient.getData(), patient.getTime())
     patientPlot.createPatientPlot()
+    
 #buttons to carry out functionality
 buttonFrame = tkinter.Frame(root)
 buttonFrame.pack(side=tkinter.TOP, pady=10, padx=10)

@@ -6,26 +6,17 @@ import pandas
 import numpy
 
 class Plot:
-    def __init__(self, canvas: tkinter.Canvas, data: pandas.DataFrame):
+    def __init__(self, canvas: tkinter.Canvas, data: pandas.DataFrame, time:int):
         self.canvas = canvas
+        self.time = time
         self.timeFigure = matplotlib.pyplot.Figure(figsize=(5,5), dpi=100)
         self.frequencyFigure = matplotlib.pyplot.Figure(figsize=(5,5), dpi=100)
         self.signal = signalProcessing.signal(data)
-    
-    def __time(self, entry: tkinter.Entry) -> int:
-        time = int(entry.get())
-        return time
-    
-    def __returnTime(self, entry: tkinter.Entry, root: tkinter.Tk):
-        global timer
-        timer = self.__time(entry)
-        root.destroy()
-        self.__draw()
        
     def __originalSignal(self):
         originalPlot = self.timeFigure.add_subplot(1, 1, 1)
         originalPlot.set_title('Recorded change in acceleration')
-        originalPlot.set_xlabel('time (' + str(timer) + 's)')
+        originalPlot.set_xlabel('time (' + str(self.time) + 's)')
         originalPlot.set_ylabel('Amplitude (m/s^2)')
         originalPlot.set_xticks([])
         originalPlot.plot(numpy.arange(len(self.signal.data.iloc[:, 0])), self.signal.data.iloc[:, 0])
@@ -54,6 +45,6 @@ class Plot:
         query.pack()
         entry = tkinter.Entry(root)
         entry.pack()
-        confirmButton = tkinter.Button(root, text="Confirm", command=lambda: self.__returnTime(entry, root))
+        confirmButton = tkinter.Button(root, text="Confirm", command=lambda: self.__draw())
         confirmButton.pack(side=tkinter.BOTTOM)
         

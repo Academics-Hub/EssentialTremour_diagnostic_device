@@ -21,7 +21,7 @@ class patient:
         p = portListener.portListener()
         port = p.findArduino()
         a = arduino.Arduino(port, 9600)
-        csv = self.name + ".csv"
+        csv = self.name + "-" + str(timer) + ".csv"
         a.read(csv, timer)
         data = pandas.read_csv(csv)
         tkinter.messagebox.showinfo("Success", "Patient data read successfully")
@@ -64,5 +64,11 @@ class patient:
         entry.pack()
         confirmButton = tkinter.Button(root, text="Confirm", command=lambda: self.__returnTime(entry, root))
         confirmButton.pack(side=tkinter.BOTTOM)
+    
+    def getData(self):
+        return data
+    
+    def getTime(self):
+        return timer
     
        
