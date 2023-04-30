@@ -21,7 +21,7 @@ class patient:
         p = portListener.portListener()
         port = p.findArduino()
         a = arduino.Arduino(port, 9600)
-        csv = self.name + ".csv"
+        csv = self.name + "-" + str(timer) + ".csv"
         a.read(csv, timer)
         data = pandas.read_csv(csv)
         tkinter.messagebox.showinfo("Success", "Patient data read successfully")
@@ -47,12 +47,12 @@ class patient:
         timerLabel.config(height=4)
         timerLabel.pack()
         countdown_thread = threading.Thread(target=self.__countdown, args=(timer, timerLabel, root))
-        #recording_thread = threading.Thread(target=self.__record, args=(timer,))
+        recording_thread = threading.Thread(target=self.__record, args=(timer,))
         countdown_thread.start()
-        #recording_thread.start()
+        recording_thread.start()
         root.mainloop()
         countdown_thread.join()
-        #recording_thread.join()
+        recording_thread.join()
     
     def recordPatient(self):
         root = tkinter.tkinter()
@@ -64,5 +64,11 @@ class patient:
         entry.pack()
         confirmButton = tkinter.Button(root, text="Confirm", command=lambda: self.__returnTime(entry, root))
         confirmButton.pack(side=tkinter.BOTTOM)
+    
+    def getData(self):
+        return data
+    
+    def getTime(self):
+        return timer
     
        
