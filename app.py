@@ -106,9 +106,9 @@ def patientData():
     #define data frame
     global df
     #define port listener object
-    portListener = portListener.portListener()
+    pl = portListener.portListener()
     #find port of arduino
-    port = portListener.findArduino()
+    port = pl.findArduino()
     #define a new arduiuno at the port, with a baud rate of 9600
     arduino = arduino.arduino(port, 9600)
     #read data from the arduino for defined time
