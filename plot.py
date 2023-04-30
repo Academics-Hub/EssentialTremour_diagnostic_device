@@ -29,22 +29,11 @@ class Plot:
         transformedPlot.set_yticks([])
         transformedPlot.plot(frequencies, transformedSignal)
         
-    def __draw(self):
+    def createPatientPlot(self):
         self.__originalSignal()
         self.__transformedSignal()
         timePlot = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.timeFigure, self.canvas)
         timePlot.get_tk_widget().place(relx=0.3, rely=0.5, anchor=tkinter.CENTER, relwidth=0.5, relheight=0.6)
         frequencyPlot = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.frequencyFigure, self.canvas)
         frequencyPlot.get_tk_widget().place(relx=0.7, rely=0.5, anchor=tkinter.CENTER, relwidth=0.5, relheight=0.6)
-        
-    def createPatientPlot(self):
-        root = tkinter.Tk()
-        root.title("Plot Time")
-        root.geometry = ("100x200")
-        query = tkinter.Label(root, text="What timeframe would you like to plot for (seconds)?")
-        query.pack()
-        entry = tkinter.Entry(root)
-        entry.pack()
-        confirmButton = tkinter.Button(root, text="Confirm", command=lambda: self.__draw())
-        confirmButton.pack(side=tkinter.BOTTOM)
         

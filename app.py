@@ -1,6 +1,6 @@
 import tkinter
 import pandas
-import recordPatient
+import patient
 import plot
 import csvHandling
 
@@ -15,9 +15,9 @@ def getCSV():
     patientPlot.createPatientPlot()
 
 def patientRecordOnClick():
-    patient = recordPatient.patient("test")
-    patient.recordPatient()
-    patientPlot = plot.Plot(plot_canvas, patient.getData(), patient.getTime())
+    p = patient.Patient()
+    p.recordPatient()
+    patientPlot = plot.Plot(plot_canvas, p.getData(), p.getTime())
     patientPlot.createPatientPlot()
     
 #buttons to carry out functionality
