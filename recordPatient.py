@@ -75,15 +75,15 @@ class patient:
         timerLabel.pack()
         #defines multithreading for the countdown to run parrallel to the recording
         countdown_thread = threading.Thread(target=self.__countdown, args=(timer, timerLabel, root))
-        #recording_thread = threading.Thread(target=self.__record, args=(timer,))
+        recording_thread = threading.Thread(target=self.__record, args=(timer,))
         
         countdown_thread.start()
-        #recording_thread.start()
+        recording_thread.start()
         
         root.mainloop()
         
         countdown_thread.join()
-        #recording_thread.join()
+        recording_thread.join()
         
     
        
