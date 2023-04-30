@@ -6,7 +6,8 @@ import csvHandling
 
 root = tkinter.Tk()
 root.title("Essential Tremor Analysis")
-
+plot_canvas = tkinter.Canvas(root)
+analysis_canvas = tkinter.Canvas(root)
 def getCSV():
     file = tkinter.filedialog.askopenfilename()
     csv = csvHandling.Csv(file)
@@ -28,6 +29,8 @@ importButton.pack(side=tkinter.LEFT, pady=10, padx=10)
 plotButton = tkinter.Button(buttonFrame, text="Record patient data", command=patientRecordOnClick)
 plotButton.pack(side=tkinter.LEFT, pady=10, padx=10)
 #plot canvas
-plot_canvas = tkinter.Canvas(root)
-plot_canvas.pack(anchor=tkinter.S, expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH )
+plot_canvas.pack(expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH )
+#analysis canvas
+analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkinter.BOTH )
+analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tkinter.NW, text="Analysis")
 root.mainloop()
