@@ -6,9 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import arduino as a
+import arduino
 from tkinter import Label
 import time
+import portListener
 
 root = tk.Tk()
 
@@ -100,13 +101,23 @@ def countdown(count, label):
         root.after(1000, countdown, count-1)
         
 def patientData():
+    #define timer
     timer = 10
+    #define data frame
     global df
-    arduino = a.arduino('/dev/ttyACM0', 9600)
+    #define port listener object
+    portListener = portListener.portListener()
+    #find port of arduino
+    port = portListener.findArduino()
+    #define a new arduiuno at the port, with a baud rate of 9600
+    arduino = arduino.arduino(port, 9600)
+    #read data from the arduino for defined time
     arduino.read('data.csv', timer)
+    #move data into previously defined data frame
     df = pd.read_csv('data.csv')
     messagebox.showinfo("Success", "Patient data read successfully")
-    plotData()
+    #plot the data
+    plotData(timer)
     
     timer_window = tk.Toplevel(root)
     timer_window.geometry("200x100")      
