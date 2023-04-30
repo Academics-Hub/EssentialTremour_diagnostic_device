@@ -35,10 +35,33 @@ class patient:
         csv = self.name + ".csv"
         a.read(csv, timer)
         #move data into previously defined data frame
-        df = pd.read_csv('data.csv')
+        df = pd.read_csv(csv)
         messagebox.showinfo("Success", "Patient data read successfully")
         
-    def recordPatient(self, timer: int):
+    def __time(self, entry: tk.Entry) -> int:
+        time = int(entry.get())
+        return time
+    
+    def __returnTime(self, entry: tk.Entry, root: tk.Tk):
+        global timer
+        timer = self.__time(entry)
+        root.destroy()
+        self.__record()
+        
+    def recordPatient(self):
+        root = tk.Tk()
+        root.title("Recording Time")
+        root.geometry = ("100x200")
+        query = Label(root, text="How long would you like to record data for (seconds)?")
+        query.pack()
+        
+        entry = tk.Entry(root)
+        entry.pack()
+        
+        confirmButton = tk.Button(root, text="Confirm", command=lambda: self.__returnTime(entry, root))
+        confirmButton.pack(side=tk.BOTTOM)
+        
+    def __record(self):
         #define root window
         root = tk.Tk()
         root.title("Recording Patient Data")
@@ -52,15 +75,15 @@ class patient:
         timerLabel.pack()
         #defines multithreading for the countdown to run parrallel to the recording
         countdown_thread = threading.Thread(target=self.__countdown, args=(timer, timerLabel, root))
-        recording_thread = threading.Thread(target=self.__record, args=(timer,))
+        #recording_thread = threading.Thread(target=self.__record, args=(timer,))
         
         countdown_thread.start()
-        recording_thread.start()
+        #recording_thread.start()
         
         root.mainloop()
         
         countdown_thread.join()
-        recording_thread.join()
+        #recording_thread.join()
         
     
        

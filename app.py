@@ -19,10 +19,10 @@ def getCSV():
     # Display a success message after importing the CSV file
     messagebox.showinfo("Success", "CSV file imported successfully")
     plotData(10)
-    
+
 def patientRecordOnClick():
     patient = recordPatient.patient("test")
-    patient.recordPatient(10)
+    patient.recordPatient()
 
 # Add a command to the "File" menu to import a CSV file
 buttonFrame = tk.Frame(root)
