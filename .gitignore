@@ -1,1 +1,5 @@
 __pycache__/*,
+__pycache__/csvHandling.cpython-310.pyc
+__pycache__/portListener.cpython-310.pyc
+__pycache__/plot.cpython-310.pyc
+__pycache__/patient.cpython-310.pyc

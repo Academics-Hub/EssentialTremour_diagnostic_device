@@ -5,7 +5,7 @@ import signalProcessing
 import pandas
 import numpy
 
-class Plot:
+class Plot: 
     def __init__(self, canvas: tkinter.Canvas, data: pandas.DataFrame, time:int):
         self.canvas = canvas
         self.time = time

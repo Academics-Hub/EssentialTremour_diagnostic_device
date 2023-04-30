@@ -1,5 +1,4 @@
 import tkinter
-import pandas
 import patient
 import plot
 import csvHandling
