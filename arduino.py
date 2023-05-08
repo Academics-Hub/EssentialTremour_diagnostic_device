@@ -1,4 +1,4 @@
-import serial
+import subprocess
 from datetime import datetime
 import csv
 import tkinter as tk
@@ -7,24 +7,18 @@ import numpy as np
 import time as ti
 
 def read(filename):
-    ser = serial.Serial('/dev/ttyACM0', 9600)
-    #print(t1)
+    # Call the C++ program as a subprocess
+    subprocess.call(["./serial_to_csv"])
 
-    timer = 10
-    messagebox.showinfo("Please wait", "Reading patient data for " + str(timer) + " seconds")
+    # Read the data from the CSV file created by the C++ program
+    with open("data.csv", "r") as f:
+        data = [int(line.strip()) for line in f]
 
-    t1 = datetime.now()
-    data = []
-    with open(filename, 'w') as f:
+    # Write the data to the output file
+    with open(filename, "w") as f:
         writer = csv.writer(f)
-        while True:
-            if (datetime.now() - t1).seconds > timer:
-                break
-            temp = ser.readline().decode().strip()
-            data.append(int(temp))
-        
-        for i in range(len(data)):
-            writer.writerow([data[i]])
+        for value in data:
+            writer.writerow([value])
 
-    ser.close()
-    
+    # Show a message box indicating that the data has been read
+    messagebox.showinfo("Data read", "Patient data has been read and saved to " + filename)
