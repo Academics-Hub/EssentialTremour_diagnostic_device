@@ -1,29 +1,25 @@
-#include <Wire.h>
-#include </home/jono/EssentialTremour_diagnostic_device/collectdata/ACL2.h>
+#include <Nano33BLE_System.h>
 
-ACL2 accel;
+#define CS 9
 
-unsigned long startTime; // variable to store the start time
+#include <SPI.h>
+#include <ADXL362.h>
 
-void setup() {
-  Serial.begin(9600);
-  Wire.begin();
-  accel.begin();
-  startTime = millis(); // store the current time as the start time
+ADXL362 accelerometer; 
+
+void setup(void)
+{
+  Serial.begin(9600); 
+  accelerometer.begin(CS); 
+  accelerometer.beginMeasure(); 
 }
 
-void loop() {
-  unsigned long elapsedTime = millis() - startTime; // calculate the elapsed time
-  if (elapsedTime >= 10000) { // check if elapsed time has exceeded 10 seconds
-    return; // exit the loop
-  }
-  sensors_event_t event;
-  accel.getEvent(&event);
-  Serial.print(elapsedTime/1000.0); // print elapsed time in seconds
-  Serial.print(",");
-  Serial.println(event.acceleration.x);
-  delay(10);
+void loop()
+{
+  int16_t x, y, z, t;
+  accelerometer.readXYZTData(x, y, z, t);
+
+  Serial.println(z);
+
+  delay(1);
 }
-
-
-

@@ -12,6 +12,7 @@ class Plot:
         self.timeFigure = matplotlib.pyplot.Figure(figsize=(5,5), dpi=100)
         self.frequencyFigure = matplotlib.pyplot.Figure(figsize=(5,5), dpi=100)
         self.signal = signalProcessing.signal(data)
+        self.data = data
        
     def __originalSignal(self):
         originalPlot = self.timeFigure.add_subplot(1, 1, 1)
@@ -22,12 +23,9 @@ class Plot:
         originalPlot.plot(numpy.arange(len(self.signal.data.iloc[:, 0])), self.signal.data.iloc[:, 0])
     
     def __transformedSignal(self):
-        frequencies, transformedSignal = self.signal.applyFourierTransform()
         transformedPlot = self.frequencyFigure.add_subplot(1, 1, 1)
-        transformedPlot.set_title('Normalized frequency spectrum, \ndisplaying spikes in the 90th percentile of frequencies')
-        transformedPlot.set_xlabel('Frequency (Hz)')
-        transformedPlot.set_yticks([])
-        transformedPlot.plot(frequencies, transformedSignal)
+        transformedPlot.set_title('Frequency analysis')
+        transformedPlot.psd(self.data, Fs=1000, antialiased=True)
         
     def createPatientPlot(self):
         self.__originalSignal()

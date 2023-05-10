@@ -11,8 +11,8 @@ class signal:
         transformedSignal = scipy.fft.fft(signal)
         transformedSignal = numpy.delete(transformedSignal, 0)
         transformedSignal_shifted = scipy.fft.fftshift(transformedSignal)
-        frequencies = scipy.fft.fftfreq(transformedSignal_shifted.size, d=0.1)
-        return scipy.fft.fftshift(frequencies), self.__normaliseSpectrum(transformedSignal_shifted)
+        frequencies = scipy.fft.fftfreq(transformedSignal_shifted.size, d=0.001)
+        return scipy.fft.fftshift(frequencies), transformedSignal_shifted
     
     def __normaliseSpectrum(self, transformedSignal: numpy.ndarray) -> numpy.ndarray:
         percentile = numpy.percentile(transformedSignal, 90)
