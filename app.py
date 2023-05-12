@@ -1,13 +1,19 @@
 import tkinter
+import customtkinter
 import patient
 import plot
 import csvHandling
 
-root = tkinter.Tk()
-root.title("Essential Tremor Analysis")
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
 
+root = customtkinter.CTk()
+root.title("Essential Tremor Analysis")
+colour = "#2A2A2A"
+plot_canvas = tkinter.Canvas(root, bd=0, bg=colour, highlightthickness=0)
+analysis_canvas = tkinter.Canvas(root, bd=0, bg=colour, highlightthickness=0)
 def getCSV():
-    file = tkinter.filedialog.askopenfilename()
+    file = customtkinter.filedialog.askopenfilename()
     csv = csvHandling.Csv(file)
     data = csv.read()
     patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())
@@ -20,13 +26,15 @@ def patientRecordOnClick():
     patientPlot.createPatientPlot()
     
 #buttons to carry out functionality
-buttonFrame = tkinter.Frame(root)
+buttonFrame = customtkinter.CTkFrame(root)
 buttonFrame.pack(side=tkinter.TOP, pady=10, padx=10)
-importButton = tkinter.Button(buttonFrame, text="Import CSV File and plot data", command=getCSV)
+importButton = customtkinter.CTkButton(buttonFrame, text="Import CSV File and plot data", command=getCSV)
 importButton.pack(side=tkinter.LEFT, pady=10, padx=10)
-plotButton = tkinter.Button(buttonFrame, text="Record patient data", command=patientRecordOnClick)
+plotButton = customtkinter.CTkButton(buttonFrame, text="Record patient data", command=patientRecordOnClick)
 plotButton.pack(side=tkinter.LEFT, pady=10, padx=10)
 #plot canvas
-plot_canvas = tkinter.Canvas(root)
-plot_canvas.pack(anchor=tkinter.S, expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH )
+plot_canvas.pack(expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH )
+#analysis canvas
+analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkinter.BOTH )
+analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tkinter.NW, text="Analysis", fill="white")
 root.mainloop()
