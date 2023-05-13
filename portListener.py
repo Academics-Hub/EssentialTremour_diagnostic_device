@@ -10,7 +10,8 @@ class portListener:
         for p in self.ports:
             if "Arduino Nano 33 BLE" in p.description:
                 return p.device
-        return self.noArduino()
+            else:
+                return self.noArduino()
     
     def noArduino(self):
         messagebox.showerror("Error", "No Arduino Nano 33 BLE found. Please connect an Arduino Nano 33 BLE and try again.") #defines error message if arduino not plugged in
