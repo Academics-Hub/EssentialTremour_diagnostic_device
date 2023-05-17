@@ -3,6 +3,7 @@ import customtkinter
 import patient
 import plot
 import csvHandling
+import analysis
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
@@ -12,12 +13,17 @@ root.title("Essential Tremor Analysis")
 colour = "#2A2A2A"
 plot_canvas = tkinter.Canvas(root, bd=0, bg=colour, highlightthickness=0)
 analysis_canvas = tkinter.Canvas(root, bd=0, bg=colour, highlightthickness=0)
+analysis_obj = None
+
 def getCSV():
+    global analysis_obj  # define analysis_obj as a global variable
     file = customtkinter.filedialog.askopenfilename()
     csv = csvHandling.Csv(file)
     data = csv.read()
     patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())
     patientPlot.createPatientPlot()
+    analysis_obj = analysis.Analysis(analysis_canvas, data)
+    analysis_obj.displayCSD()
 
 def patientRecordOnClick():
     p = patient.Patient()
@@ -37,4 +43,5 @@ plot_canvas.pack(expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOT
 #analysis canvas
 analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkinter.BOTH )
 analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tkinter.NW, text="Analysis", fill="white")
+
 root.mainloop()
