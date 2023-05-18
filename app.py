@@ -16,13 +16,14 @@ analysis_canvas = tkinter.Canvas(root, bd=0, bg=colour, highlightthickness=0)
 analysis_obj = None
 
 def getCSV():
-    global analysis_obj  # define analysis_obj as a global variable
+    global analysis_obj
     file = customtkinter.filedialog.askopenfilename()
     csv = csvHandling.Csv(file)
     data = csv.read()
     patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())
     patientPlot.createPatientPlot()
-    analysis_obj = analysis.Analysis(analysis_canvas, data)
+    reference_filename = "ref.csv"
+    analysis_obj = analysis.Analysis(analysis_canvas, data, reference_filename)
     analysis_obj.displayCSD()
 
 def patientRecordOnClick():
@@ -31,17 +32,18 @@ def patientRecordOnClick():
     patientPlot = plot.Plot(plot_canvas, p.getData(), p.getTime())
     patientPlot.createPatientPlot()
     
-#buttons to carry out functionality
+# buttons to carry out functionality
 buttonFrame = customtkinter.CTkFrame(root)
 buttonFrame.pack(side=tkinter.TOP, pady=10, padx=10)
 importButton = customtkinter.CTkButton(buttonFrame, text="Import CSV File and plot data", command=getCSV)
 importButton.pack(side=tkinter.LEFT, pady=10, padx=10)
 plotButton = customtkinter.CTkButton(buttonFrame, text="Record patient data", command=patientRecordOnClick)
 plotButton.pack(side=tkinter.LEFT, pady=10, padx=10)
-#plot canvas
-plot_canvas.pack(expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH )
-#analysis canvas
-analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkinter.BOTH )
+# plot canvas
+plot_canvas.pack(expand=True, side=tkinter.TOP, padx=5, pady=5, fill=tkinter.BOTH)
+# analysis canvas
+analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkinter.BOTH)
 analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tkinter.NW, text="Analysis", fill="white")
 
 root.mainloop()
+
