@@ -23,10 +23,10 @@ class Patient:
         port = p.findArduino()
         a = arduino.Arduino(port, 9600)
         csv = self.name + "-" + str(self.time) + ".csv"
-        a.read(csv, self.time)  # Update this line to call the read() method from the arduino module
+        a.read(csv, self.time)
         self.data = pandas.read_csv(csv)
         tkinter.messagebox.showinfo("Success", "Patient data read successfully")
-
+    
     
     def __returnPatient(self, timeEntry: tkinter.Entry, nameEntry: tkinter.Entry, root: tkinter.Tk):
         self.time = int(timeEntry.get())
