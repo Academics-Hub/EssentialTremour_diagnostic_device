@@ -1,9 +1,10 @@
 import tkinter
 import customtkinter
+import csvHandling
+from signalProcessing import Signal
+from analysis import Analysis
 import patient
 import plot
-import csvHandling
-import analysis
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
@@ -17,21 +18,22 @@ analysis_obj = None
 
 def getCSV():
     global analysis_obj
-    file = customtkinter.filedialog.askopenfilename()
-    csv = csvHandling.Csv(file)
-    data = csv.read()
-    patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())
-    patientPlot.createPatientPlot()
-    reference_filename = "ref.csv"
-    analysis_obj = analysis.Analysis(analysis_canvas, data, reference_filename)
-    analysis_obj.displayCSD()
+    file_path = customtkinter.filedialog.askopenfilename()
+    if file_path:
+        csv = csvHandling.Csv(file_path)
+        data = csv.read()
+        patientPlot = plot.Plot(plot_canvas, data, csv.readingTime())  # Updated usage of Plot class
+        patientPlot.createPatientPlot()
+        reference_file_path = "ref.csv"  # Use the constant reference file path
+        analysis_obj = Analysis(analysis_canvas, data, reference_file_path)  # Updated usage of Analysis class
+        analysis_obj.displayCSD()
 
 def patientRecordOnClick():
     p = patient.Patient()
     p.recordPatient()
     patientPlot = plot.Plot(plot_canvas, p.getData(), p.getTime())
     patientPlot.createPatientPlot()
-    
+
 # buttons to carry out functionality
 buttonFrame = customtkinter.CTkFrame(root)
 buttonFrame.pack(side=tkinter.TOP, pady=10, padx=10)
@@ -46,4 +48,10 @@ analysis_canvas.pack(expand=True, side=tkinter.BOTTOM, padx=5, pady=5, fill=tkin
 analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tkinter.NW, text="Analysis", fill="white")
 
 root.mainloop()
+
+
+
+
+
+
 
