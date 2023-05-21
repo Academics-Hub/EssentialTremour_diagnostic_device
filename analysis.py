@@ -17,6 +17,8 @@ class Analysis:
 
         # Plot patient PSD
         patient_freqs, patient_psd = scipy.signal.welch(self.patient_data, fs=200)
+        patient_psd = patient_psd.squeeze()  # Remove extra dimensions
+        patient_psd = np.where(patient_psd <= 0, 1e-10, patient_psd)  # Set zero or negative values to a small positive value
         ax.plot(patient_freqs, 10 * np.log10(patient_psd), label="Patient PSD")
 
         # Resize reference data to match patient data length
@@ -28,6 +30,8 @@ class Analysis:
 
         # Plot reference PSD
         reference_freqs, reference_psd = scipy.signal.welch(reference_data_resized, fs=200)
+        reference_psd = reference_psd.squeeze()  # Remove extra dimensions
+        reference_psd = np.where(reference_psd <= 0, 1e-10, reference_psd)  # Set zero or negative values to a small positive value
         ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
 
         ax.set_title("Power Spectral Density")
@@ -44,6 +48,7 @@ class Analysis:
 
         # Store the canvas reference
         self.canvas = canvas
+
 
 
 
