@@ -1,44 +1,62 @@
-import tkinter
-import matplotlib.pyplot as plt
+import scipy.signal
 import numpy as np
-import pandas as pd
-from signalProcessing import Signal
+import matplotlib.pyplot as plt
+import customtkinter
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import tkinter as tk
 
 class Analysis:
-    def __init__(self, canvas: tkinter.Canvas, data: pd.DataFrame, reference_signal: pd.DataFrame):
+    def __init__(self, analysis_canvas, patient_data, reference_data):
+        self.canvas = analysis_canvas
+        self.patient_data = patient_data
+        self.reference_data = reference_data
+
+    def displayPSD(self):
+        fig, ax = plt.subplots(figsize=(8, 4))
+
+        # Plot patient PSD
+        patient_freqs, patient_psd = scipy.signal.welch(self.patient_data, fs=200)
+        ax.plot(patient_freqs, 10 * np.log10(patient_psd), label="Patient PSD")
+
+        # Resize reference data to match patient data length
+        reference_data_resized = np.interp(
+            np.linspace(0, 1, num=len(self.patient_data)),
+            np.linspace(0, 1, num=len(self.reference_data)),
+            self.reference_data
+        )
+
+        # Plot reference PSD
+        reference_freqs, reference_psd = scipy.signal.welch(reference_data_resized, fs=200)
+        ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
+
+        ax.set_title("Power Spectral Density")
+        ax.set_xlabel("Frequency (Hz)")
+        ax.set_ylabel("Power Spectral Density (dB/Hz)")
+        ax.legend()
+
+        # Create a Tkinter canvas and display the figure on it
+        canvas = FigureCanvasTkAgg(fig, master=self.canvas)
+        canvas.draw()
+
+        # Pack the canvas into the Tkinter window
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # Store the canvas reference
         self.canvas = canvas
-        self.time_signal = data
-        self.reference_signal = reference_signal
-        self.frequency_signal = Signal(data).applyFourierTransform()
-        self.reference_frequency_signal = Signal(reference_signal).applyFourierTransform()
-        self.csd_patient = Signal.calculateCrossSpectralDensity(self.frequency_signal[1], self.reference_frequency_signal[1])
-        self.csd_reference = Signal.calculateCrossSpectralDensity(self.reference_frequency_signal[1], self.reference_frequency_signal[1])
 
-    def displayCSD(self):
-        self.canvas.create_line(50, 50, 750, 50, width=2)
-        self.canvas.create_line(50, 50, 50, 550, width=2)
-        self.canvas.create_text(400, 30, text="Cross Spectral Density", font=("Arial", 20))
 
-        x_scale = 700 / (self.csd_patient.shape[0] - 1)
-        y_scale = 500 / (max(np.max(self.csd_patient), np.max(self.csd_reference)) - min(np.min(self.csd_patient), np.min(self.csd_reference)))
 
-        # Plot patient's CSD
-        for i in range(self.csd_patient.shape[0] - 1):
-            x1 = 50 + i * x_scale
-            y1 = 550 - (self.csd_patient[i] - min(np.min(self.csd_patient), np.min(self.csd_reference))) * y_scale
-            x2 = 50 + (i + 1) * x_scale
-            y2 = 550 - (self.csd_patient[i + 1] - min(np.min(self.csd_patient), np.min(self.csd_reference))) * y_scale
-            self.canvas.create_line(x1, y1, x2, y2, width=2, fill="blue")
 
-        # Plot reference CSD
-        for i in range(self.csd_patient.shape[0] - 1):
-            x1 = 50 + i * x_scale
-            y1 = 550 - (self.csd_reference[i] - min(np.min(self.csd_patient), np.min(self.csd_reference))) * y_scale
-            x2 = 50 + (i + 1) * x_scale
-            y2 = 550 - (self.csd_reference[i + 1] - min(np.min(self.csd_patient), np.min(self.csd_reference))) * y_scale
-            self.canvas.create_line(x1, y1, x2, y2, width=2, fill="red")
 
-        self.canvas.pack()
+
+
+
+
+
+
+
+
 
 
 
