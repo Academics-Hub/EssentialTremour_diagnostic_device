@@ -1,5 +1,5 @@
 import pandas
-import tkinter
+import tkinter.messagebox
 import os
 
 class Csv:
@@ -8,11 +8,9 @@ class Csv:
     
     def read(self) -> pandas.DataFrame:
         data = pandas.read_csv(self.filename)
-        numerical_data = data.iloc[:, 0].values  # Extract the first column as numerical data
         tkinter.messagebox.showinfo("Success", "CSV file imported successfully")
-        return numerical_data
+        return data.iloc[:, 0].values
 
-    
     def readingTime(self) -> int:
         time: int
         name, ext = os.path.splitext(self.filename)
