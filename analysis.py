@@ -9,12 +9,16 @@ class Analysis:
         self.patient_data = patient_data
         self.reference_data = reference_data
         self.canvas = canvas
+        self.patient_freqs = None
 
     def displayPSD(self):
         fig, ax = plt.subplots(figsize=(8, 4))
 
         # Reshape patient data
         patient_data = self.patient_data.reshape(-1)
+
+        # Calculate patient PSD and assign frequency values to self.patient_freqs
+        self.patient_freqs, patient_psd = scipy.signal.welch(patient_data, fs=200)
 
         # Plot patient PSD
         patient_freqs, patient_psd = scipy.signal.welch(patient_data, fs=200)
@@ -53,57 +57,71 @@ class Analysis:
 
     def analyze_psd(self):
         # Perform your PSD analysis and compare with the reference PSD
-            
+
+        # Calculate the patient PSD using scipy.signal.welch
+        patient_freqs, patient_psd = scipy.signal.welch(self.patient_data, fs=200)
+
+        # Calculate the reference PSD using scipy.signal.welch
+        reference_freqs, reference_psd = scipy.signal.welch(self.reference_data, fs=200)
+
         # Define the frequency range for essential tremors
         tremor_frequency_range = (4, 12)  # Hz
-            
+
         # Get the indices corresponding to the frequency range
-        freq_indices = np.where((self.patient_freqs >= tremor_frequency_range[0]) &
-                                (self.patient_freqs <= tremor_frequency_range[1]))[0]
-            
+        freq_indices = np.where((patient_freqs >= tremor_frequency_range[0]) &
+                                (patient_freqs <= tremor_frequency_range[1]))[0]
+
         # Get the PSD values within the frequency range
-        patient_psd_range = self.patient_psd[freq_indices]
-        reference_psd_range = self.reference_psd[freq_indices]
-            
+        patient_psd_range = patient_psd[freq_indices]
+        reference_psd_range = reference_psd[freq_indices]
+
         # Compare the patient PSD with the reference PSD
         has_essential_tremor = np.max(patient_psd_range) > np.max(reference_psd_range)
-            
+
         # Find the peak frequencies within the tremor frequency range
         peak_indices = scipy.signal.find_peaks(patient_psd_range, prominence=1)[0]
-        peak_frequencies = self.patient_freqs[freq_indices][peak_indices]
-            
+        peak_frequencies = patient_freqs[freq_indices][peak_indices]
+
         return has_essential_tremor, peak_frequencies
+
 
     def generate_patient_report(self, patient_name, has_essential_tremor, peak_frequencies):
         report = f"Patient Report for {patient_name}\n\n"
 
+        # Configure formatting options
+        heading_font = ("Arial", 16, "bold")
+        body_font = ("Arial", 12)
+        bullet_point = "  \u2022 "  # Bullet point character
+
         if has_essential_tremor:
-            report += "Diagnosis: Essential Tremor\n"
             report += "Observations:\n"
-            report += "- The patient exhibits characteristics consistent with essential tremor.\n"
-            report += "- Significant peaks were observed in the following frequency range(s):\n"
+            report += bullet_point + "The patient exhibits characteristics consistent with essential tremor.\n"
+            report += bullet_point + "Significant peaks were observed in the following frequency range(s):\n"
             for frequency in peak_frequencies:
-                report += f"  - {frequency:.2f} Hz\n"
+                report += bullet_point + f"{frequency:.2f} Hz\n"
         else:
             report += "Diagnosis: No Essential Tremor Detected\n"
+            report += "\n"
             report += "Observations:\n"
-            report += "- The patient does not exhibit characteristics consistent with essential tremor.\n"
+            report += bullet_point + "The patient does not exhibit characteristics consistent with essential tremor.\n"
 
         return report
 
-    def generate_report_and_display(self, patient_name):
+
+    def generate_report_and_display(self, patient_name, report_canvas):
         # Perform PSD analysis and obtain essential tremor diagnosis and peak frequencies
         has_essential_tremor, peak_frequencies = self.analyze_psd()
 
         # Generate the patient report
         report = self.generate_patient_report(patient_name, has_essential_tremor, peak_frequencies)
 
-        # Clear the existing content of the text widget
-        self.text.delete("1.0", tk.END)
+        # Clear the existing content of the report canvas
+        report_canvas.delete(tk.ALL)
 
-        # Append the patient report to the text widget
-        self.text.insert(tk.END, report)
+        # Create a text object on the report canvas to display the report
+        report_canvas.create_text(20, 20, anchor=tk.NW, text=report, fill="white")
 
-        # Display the power spectral density
-        self.displayPSD()
+
+
+
 

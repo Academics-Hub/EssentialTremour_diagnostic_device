@@ -1,7 +1,5 @@
 #include <Nano33BLE_System.h>
-
 #define CS 10
-
 #include <SPI.h>
 #include <ADXL362.h>
 
@@ -24,15 +22,16 @@ void setup(void)
 void loop()
 {
   int16_t x, y, z, t;
-  unfilteredZ[2] = unfilteredZ [1];
-  unfilteredZ [1] = unfilteredZ [0];
-  zFiltered[2] = zFiltered[1];
-  zFiltered[1] = zFiltered[0];
-  accelerometer.readXYZTData(x, y, unfilteredZ, t);
+  unfilteredZ[2] = unfilteredZ[1];
+  unfilteredZ[1] = unfilteredZ[0];
+  filteredZ[2] = filteredZ[1];
+  filteredZ[1] = filteredZ[0];
+  accelerometer.readXYZTData(x, y, unfilteredZ[0], t);
 
-  filteredZ[0] = a * unfilteredZ[2] + b * unfilteredZ[1] + c * unfilteredZ[0] + d * unfilteredZ[2] + e * unfilteredZ[1];  
+  filteredZ = a * unfilteredZ[2] + b * unfilteredZ[1] + c * unfilteredZ[0] + d * unfilteredZ[2] + e * unfilteredZ[1];  
 
   Serial.println(filteredZ);
 
   delay(1);
-}    
+}
+    
