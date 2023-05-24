@@ -27,6 +27,7 @@ class Patient:
         self.data = pandas.read_csv(csv)
         tkinter.messagebox.showinfo("Success", "Patient data read successfully")
     
+    
     def __returnPatient(self, timeEntry: tkinter.Entry, nameEntry: tkinter.Entry, root: tkinter.Tk):
         self.time = int(timeEntry.get())
         self.name = str(nameEntry.get())

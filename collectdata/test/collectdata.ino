@@ -1,6 +1,6 @@
 #include <Nano33BLE_System.h>
 
-#define CS 9
+#define CS 10
 
 #include <SPI.h>
 #include <ADXL362.h>
