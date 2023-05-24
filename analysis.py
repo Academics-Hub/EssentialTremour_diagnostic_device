@@ -5,10 +5,11 @@ import numpy as np
 import scipy.signal
 
 class Analysis:
-    def __init__(self, patient_data, reference_data, canvas):
+    def __init__(self, patient_data, reference_data, psd_canvas, report_canvas):
         self.patient_data = patient_data
         self.reference_data = reference_data
-        self.canvas = canvas
+        self.report_canvas = report_canvas
+        self.psd_canvas = psd_canvas
         self.patient_freqs = None
 
     def displayPSD(self):
@@ -42,17 +43,17 @@ class Analysis:
         reference_psd = np.where(reference_psd <= 0, 1e-10, reference_psd)  # Set zero or negative values to a small positive value
         ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
 
-        ax.set_title("Power Spectral Density")
+        #ax.set_title("Power Spectral Density")
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Power Spectral Density (dB/Hz)")
         ax.legend()
 
         # Create a Tkinter canvas and display the figure on it
-        self.canvas = FigureCanvasTkAgg(fig, master=self.canvas)
-        self.canvas.draw()
+        self.psd_canvas = FigureCanvasTkAgg(fig, master=self.psd_canvas)
+        self.psd_canvas.draw()
 
-        # Pack the canvas into the Tkinter window
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        # Embed the figure canvas within the psd_canvas
+        self.psd_canvas.get_tk_widget().place(relx=0, rely=0, relwidth=1, relheight=1)
 
 
     def analyze_psd(self):

@@ -3,8 +3,9 @@ import customtkinter
 import csvHandling
 from analysis import Analysis
 import patient
-import plot
+from plot import Plot
 import numpy as np
+import os
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
@@ -13,6 +14,7 @@ root = customtkinter.CTk()
 root.title("Essential Tremor Analysis")
 colour = "#2A2A2A"
 report_canvas = tk.Canvas(root, bd=0, bg=colour, highlightthickness=0)
+signal_canvas = tk.Canvas(root, bd=0, bg=colour, highlightthickness=0)
 analysis_canvas = tk.Canvas(root, bd=0, bg=colour, highlightthickness=0)
 analysis_obj = None
 data = None  # Global variable for data
@@ -57,12 +59,29 @@ def getCSV():
             reference_data = np.interp(new_indices, old_indices, reference_data)
             print("After interpolation - reference_data shape:", reference_data.shape)
 
-        # Create an instance of the Analysis class
-        analysis_obj = Analysis(data, reference_data, analysis_canvas)
+        analysis_obj = Analysis(data, reference_data, analysis_canvas, report_canvas)
+        recording_time = csv.readingTime()
+        plot_obj = Plot(signal_canvas, data, recording_time)
 
-        # Display the power spectral density on the analysis canvas
-        analysis_obj.displayPSD()
-        analysis_obj.generate_report_and_display("test",report_canvas)
+        # Display the original signal on the signal canvas
+        plot_obj.createPatientPlot()
+
+        # Get the patient's name from the CSV file
+        patient_name = os.path.splitext(os.path.basename(file_path))[0]
+
+        # Display the PSD and generate the report
+        displayPSDAndGenerateReport(patient_name)
+
+
+def displayPSDAndGenerateReport(patient_name):
+    global analysis_obj, report_canvas
+
+    # Display the power spectral density on the analysis canvas
+    analysis_obj.displayPSD()
+
+    # Generate the report and display it on the report canvas
+    analysis_obj.generate_report_and_display(patient_name, report_canvas)
+
 
 def patientRecordOnClick():
     p = patient.Patient()
@@ -78,13 +97,29 @@ importButton.pack(side=tk.LEFT, pady=10, padx=10)
 plotButton = customtkinter.CTkButton(buttonFrame, text="Record patient data", command=patientRecordOnClick)
 plotButton.pack(side=tk.LEFT, pady=10, padx=10)
 
-# Report canvas
-report_canvas.pack(expand=True, side=tk.TOP, padx=5, pady=5, fill=tk.BOTH)
-report_canvas.create_text(20, 20, font="Times 30 bold", anchor=tk.NW, text="Report", fill="white")
+# Original signal container
+signal_container = tk.LabelFrame(root, text="Original Signal", font="Times 30 bold", fg="white", bg=colour)
+signal_container.pack(expand=True, side=tk.TOP, padx=5, pady=5, fill=tk.BOTH)
+
+# Original signal canvas
+signal_canvas = tk.Canvas(signal_container, bd=0, bg=colour, highlightthickness=0)
+signal_canvas.pack(expand=True, fill=tk.BOTH)
+
+# Analysis container
+analysis_container = tk.LabelFrame(root, text="Power Spectral Density", font="Times 30 bold", fg="white", bg=colour)
+analysis_container.pack(expand=True, side=tk.TOP, padx=5, pady=5, fill=tk.BOTH)
 
 # Analysis canvas
-analysis_canvas.pack(expand=True, side=tk.BOTTOM, padx=5, pady=5, fill=tk.BOTH)
-analysis_canvas.create_text(20, 20, font="Times 30 bold", anchor=tk.NW, text="Analysis", fill="white")
+analysis_canvas = tk.Canvas(analysis_container, bd=0, bg=colour, highlightthickness=0)
+analysis_canvas.pack(expand=True, fill=tk.BOTH)
+
+# Report container
+report_container = tk.LabelFrame(root, text="Paitient Report", font="Times 30 bold", fg="white", bg=colour)
+report_container.pack(expand=True, side=tk.TOP, padx=5, pady=5, fill=tk.BOTH)
+
+# Report canvas
+report_canvas = tk.Canvas(report_container, bd=0, bg=colour, highlightthickness=0)
+report_canvas.pack(expand=True, fill=tk.BOTH)
 
 root.mainloop()
 
