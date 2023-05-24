@@ -31,7 +31,7 @@ def getCSV():
         data = csv.read()
 
         # Trim or interpolate the patient's data to match the desired length (10 seconds)
-        desired_length = 2000  # Assuming 200 samples per second (10 seconds * 200 samples/s)
+        desired_length = 300  # Assuming 200 samples per second (10 seconds * 200 samples/s)
         if len(data) > desired_length:
             data = data[:desired_length]
         elif len(data) < desired_length:
