@@ -19,13 +19,10 @@ class Analysis:
         patient_data = self.patient_data.reshape(-1)
 
         # Calculate patient PSD and assign frequency values to self.patient_freqs
-        self.patient_freqs, patient_psd = scipy.signal.welch(patient_data, fs=200)
+        self.patient_freqs, patient_psd = scipy.signal.welch(patient_data, fs=200, scaling='spectrum')
 
         # Plot patient PSD
-        patient_freqs, patient_psd = scipy.signal.welch(patient_data, fs=200)
-        patient_psd = patient_psd.squeeze()  # Remove extra dimensions
-        patient_psd = np.where(patient_psd <= 0, 1e-10, patient_psd)  # Set zero or negative values to a small positive value
-        ax.plot(patient_freqs, 10 * np.log10(patient_psd), label="Patient PSD")
+        ax.plot(self.patient_freqs, 10 * np.log10(patient_psd), label="Patient PSD")
 
         # Resize reference data to match patient data length
         reference_data_resized = np.interp(
@@ -38,12 +35,10 @@ class Analysis:
         reference_data_resized = reference_data_resized.reshape(-1)
 
         # Plot reference PSD
-        reference_freqs, reference_psd = scipy.signal.welch(reference_data_resized, fs=200)
-        reference_psd = reference_psd.squeeze()  # Remove extra dimensions
-        reference_psd = np.where(reference_psd <= 0, 1e-10, reference_psd)  # Set zero or negative values to a small positive value
+        reference_freqs, reference_psd = scipy.signal.welch(reference_data_resized, fs=200, scaling='spectrum')
         ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
 
-        #ax.set_title("Power Spectral Density")
+        ax.set_xlim(0, 20)  # Set x-axis range to 0 to 20 Hz
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Power Spectral Density (dB/Hz)")
         ax.legend()
@@ -54,7 +49,6 @@ class Analysis:
 
         # Embed the figure canvas within the psd_canvas
         self.psd_canvas.get_tk_widget().place(relx=0, rely=0, relwidth=1, relheight=1)
-
 
     def analyze_psd(self):
         # Perform your PSD analysis and compare with the reference PSD
@@ -91,15 +85,15 @@ class Analysis:
 
         # Configure formatting options
         heading_font = ("Arial", 16, "bold")
-        body_font = ("Arial", 12)
-        bullet_point = "  \u2022 "  # Bullet point character
+        body_font = ("Arial", 16)
+        bullet_point = "\u2022 "  # Bullet point character
 
         if has_essential_tremor:
             report += "Observations:\n"
             report += bullet_point + "The patient exhibits characteristics consistent with essential tremor.\n"
             report += bullet_point + "Significant peaks were observed in the following frequency range(s):\n"
             for frequency in peak_frequencies:
-                report += bullet_point + f"{frequency:.2f} Hz\n"
+                report += "   " + bullet_point + f"{frequency:.2f} Hz\n"
         else:
             report += "Diagnosis: No Essential Tremor Detected\n"
             report += "\n"
@@ -107,7 +101,6 @@ class Analysis:
             report += bullet_point + "The patient does not exhibit characteristics consistent with essential tremor.\n"
 
         return report
-
 
     def generate_report_and_display(self, patient_name, report_canvas):
         # Perform PSD analysis and obtain essential tremor diagnosis and peak frequencies

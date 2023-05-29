@@ -68,6 +68,7 @@ def getCSV():
 
         # Get the patient's name from the CSV file
         patient_name = os.path.splitext(os.path.basename(file_path))[0]
+        patient_name = patient_name.split('-')[0]
 
         # Display the PSD and generate the report
         displayPSDAndGenerateReport(patient_name)
@@ -122,5 +123,3 @@ report_canvas = tk.Canvas(report_container, bd=0, bg=colour, highlightthickness=
 report_canvas.pack(expand=True, fill=tk.BOTH)
 
 root.mainloop()
-
-
