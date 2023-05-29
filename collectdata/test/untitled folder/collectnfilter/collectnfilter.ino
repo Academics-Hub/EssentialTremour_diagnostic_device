@@ -12,6 +12,7 @@ float e = 9.66522217e-01;
 int16_t unfilteredZ = {0,0,0};
 int16_t filteredZ = {0,0,0};
 
+
 void setup(void)
 {
     Serial.begin(9600); 
