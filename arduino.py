@@ -10,7 +10,6 @@ class Arduino:
     def read(self, filename, timer):
         ser = serial.Serial(self.port, self.baudrate)
         self.timer = timer
-        tkinter.messagebox.showinfo("Please wait", "Reading patient data for " + str(timer) + " seconds")
         t1 = datetime.now()
         data = []
         with open(filename, 'w') as f:
@@ -19,6 +18,7 @@ class Arduino:
                 if (datetime.now() - t1).seconds > timer:
                     break
                 temp = ser.readline().decode().strip()
+                temp = int(temp)
                 data.append(int(temp))
             for i in range(len(data)):
                 writer.writerow([data[i]])
