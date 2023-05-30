@@ -29,6 +29,7 @@ def getCSV():
         # Read the patient's data CSV file
         csv = csvHandling.Csv(file_path)
         data = csv.read()
+        print("Data shape:", data.shape)
 
         # Trim or interpolate the patient's data to match the desired length (10 seconds)
         desired_length = 300  # Assuming 200 samples per second (10 seconds * 200 samples/s)
@@ -86,8 +87,7 @@ def displayPSDAndGenerateReport(patient_name):
 def patientRecordOnClick():
     p = patient.Patient()
     p.recordPatient()
-    patientPlot = plot.Plot(plot_canvas, p.getData(), p.getTime())
-    patientPlot.createPatientPlot()
+        
 
 # Buttons to carry out functionality
 buttonFrame = customtkinter.CTkFrame(root)

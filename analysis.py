@@ -3,6 +3,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal
+from scipy import signal
 
 class Analysis:
     def __init__(self, patient_data, reference_data, psd_canvas, report_canvas):
@@ -44,6 +45,7 @@ class Analysis:
         ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
 
         #ax.set_title("Power Spectral Density")
+        ax.set_xlim([0, 20])
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Power Spectral Density (dB/Hz)")
         ax.legend()

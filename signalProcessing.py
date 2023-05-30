@@ -1,9 +1,10 @@
 import pandas as pd
 import scipy.fft
 import numpy as np
+from scipy import signal
 
 class Signal:
-    def __init__(self, data):
+    def __init__(self, data: pd.DataFrame):
         self.data = data
 
     def applyFourierTransform(self):
@@ -19,12 +20,11 @@ class Signal:
         frequencies = scipy.fft.fftfreq(transformedSignal_shifted.size, d=0.001)
         return scipy.fft.fftshift(frequencies), transformedSignal_shifted
 
-    def _normaliseSpectrum(self, transformedSignal):
-        percentile = np.percentile(transformedSignal, 90)
-        for i in range(len(transformedSignal)):
-            if transformedSignal[i] < percentile:
-                transformedSignal[i] = 0
-        return np.abs(transformedSignal)
+    def _antialisingFilter(self) -> pd.DataFrame:
+        filter_high = signal.cheby1(10, 1, 3.9, 'hp', fs=1000, output='sos')
+        filteredSignal = signal.sosfilt(filter_high, self.data)
+        return pd.DataFrame(filteredSignal)
+        
 
     @staticmethod
     def calculateCrossSpectralDensity(signal1, signal2):

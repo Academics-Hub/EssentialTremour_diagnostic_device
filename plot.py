@@ -16,16 +16,11 @@ class Plot:
 
     def __originalSignal(self):
         originalPlot = self.timeFigure.add_subplot(1, 1, 1)
-        #originalPlot.set_title('Recorded change in acceleration')
         originalPlot.set_xlabel('time (' + str(self.time) + 's)')
-        originalPlot.set_ylabel('Amplitude (m/s^2)')
+        originalPlot.set_ylabel('Vertical position')
+        originalPlot.set_yticks([])
         originalPlot.set_xticks([])
         originalPlot.plot(np.arange(len(self.data.iloc[:, 0])), self.data.iloc[:, 0])
-
-    def __transformedSignal(self):
-        transformedPlot = self.frequencyFigure.add_subplot(1, 1, 1)
-        transformedPlot.set_title('Frequency analysis')
-        transformedPlot.psd(self.data, Fs=1000, antialiased=True)
 
     def createPatientPlot(self):
         self.__originalSignal()
