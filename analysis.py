@@ -106,7 +106,7 @@ class Analysis:
             report += "Diagnosis: No Essential Tremor Detected\n"
             report += "\n"
             report += "Observations:\n"
-            report += bullet_point + "The patient does not exhibit characteristics consistent with essential tremor.\n"
+            report += "  " + bullet_point + "The patient does not exhibit characteristics consistent with essential tremor.\n"
 
         return report
 
