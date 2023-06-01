@@ -21,7 +21,7 @@ class Signal:
         return scipy.fft.fftshift(frequencies), transformedSignal_shifted
 
     def _antialisingFilter(self) -> pd.DataFrame:
-        filter_high = signal.cheby1(10, 1, 3.9, 'hp', fs=1000, output='sos')
+        filter_high = signal.cheby1(12, 1, [3.8, 100], 'bp', fs=1000, output='sos')
         filteredSignal = signal.sosfilt(filter_high, self.data)
         return pd.DataFrame(filteredSignal)
         

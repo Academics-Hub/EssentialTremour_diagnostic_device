@@ -45,7 +45,7 @@ class Analysis:
         ax.plot(reference_freqs, 10 * np.log10(reference_psd), label="Reference PSD")
 
         #ax.set_title("Power Spectral Density")
-        ax.set_xlim([0, 20])
+        ax.set_xlim([0, 30])
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Power Spectral Density (dB/Hz)")
         ax.legend()
