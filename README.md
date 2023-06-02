@@ -55,8 +55,6 @@
 
 - `analysis.py` will then use `signalProcessing.py` to data, extracting the relevant info.
 - `analysis.py` will then use `plot.py` which utilises `matplotlib` to plot the data.
-    - `matplotlib.axes.Axes.psd()` plots the power spectral density of the data. Returns the power spectral density and the frequencies (to be used for processing - maybe move this to `signalProcessing.py`). See documentation - [matplotlib.axes.Axes.psd()](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.psd.html)
-    - `matplotlib.axes.Axes.csd()` should be used to plot the cross spectral density of the data. Returns the cross spectral density and the frequencies (to be used for processing - maybe move this to `signalProcessing.py`). See documentation - [matplotlib.axes.Axes.csd()](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.csd.html#matplotlib.axes.Axes.csd)
 
 ## Classes and Methods
 
