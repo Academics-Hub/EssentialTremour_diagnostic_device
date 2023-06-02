@@ -101,7 +101,7 @@ class Analysis:
             report += bullet_point + "The patient exhibits characteristics consistent with essential tremor.\n"
             report += bullet_point + "Significant peaks were observed in the following frequency range(s):\n"
             for frequency in peak_frequencies:
-                report += bullet_point + f"{frequency:.2f} Hz\n"
+                report += "  "+bullet_point + f"{frequency:.2f} Hz\n"
         else:
             report += "Diagnosis: No Essential Tremor Detected\n"
             report += "\n"
