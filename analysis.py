@@ -68,7 +68,7 @@ class Analysis:
         reference_freqs, reference_psd = scipy.signal.welch(self.reference_data, fs=200)
 
         # Define the frequency range for essential tremors
-        tremor_frequency_range = (4, 12)  # Hz
+        tremor_frequency_range = (6, 12)  # Hz
 
         # Get the indices corresponding to the frequency range
         freq_indices = np.where((patient_freqs >= tremor_frequency_range[0]) &
@@ -101,7 +101,7 @@ class Analysis:
             report += bullet_point + "The patient exhibits characteristics consistent with essential tremor.\n"
             report += bullet_point + "Significant peaks were observed in the following frequency range(s):\n"
             for frequency in peak_frequencies:
-                report += bullet_point + f"{frequency:.2f} Hz\n"
+                report += "  " + bullet_point + f"{frequency:.2f} Hz\n"
         else:
             report += "Diagnosis: No Essential Tremor Detected\n"
             report += "\n"
