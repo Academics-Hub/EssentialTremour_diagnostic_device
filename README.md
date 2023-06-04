@@ -29,8 +29,11 @@
         - [`read()` method](#read-method-1)
         - [`readingTime()` method](#readingtime-method)
     - [`signalProcessing.py`](#signalprocessingpy)
-        - [`applyFourierTransform()` method](#applyfouriertransform-method)
-            - [`__normaliseSpectrum()` helper method](#__normalisespectrum-helper-method)
+        - [`__calculateCrossSpectralDensity()` method](#__calculatecrossspectraldensity-method)
+        - [`_antialisingFilter` method](#_antialisingfilter-method)
+    - [`plot.py`](#plotpy)
+        - [`createPatientPlot()` method](#createpatientplot-method)
+            - [`__originalSignal()` helper method](#__originalsignal-helper-method)
 
 ## Project Structure
 
@@ -154,7 +157,7 @@
 
 ### `analysis.py`
 
-- needs to be completed, will handle the processing of the data
+- handles PSD analysis of the data
 
 ---
 
@@ -164,15 +167,11 @@
 
 #### `createPatientPlot()` method
 
-- currently calls the `__originalSignal()` helper method and the `__transformedSignal()` helper method to create a plot of the original signal and the transformed signal
+- currently calls the `__originalSignal()` to create a plot of the original signal
 
 ##### `__originalSignal()` helper method
 
 - plots the original signal
-
-##### `__transformedSignal()` helper method
-
-- plots the power spectral density of the original signal
 
 ---
 
@@ -180,10 +179,9 @@
 
 - all signal processing methods should be defined here
 
-#### `applyFourierTransform()` method
+#### `__calculateCrossSpectralDensity()` method
 
-- returns the shifted frequency amplitude spectra of the data
+- does the CSD analysis
 
-##### `__normaliseSpectrum()` helper method
-
-- was previously used to normalise the data by only returning the top 90% of frequency peaks, but this is being abandoned in favour of a cross spectral density analysis, comparing a basline not tremour signal to the patients signal or an imported csv file of a signal
+#### `_antialisingFilter` method
+- applies an antialising filter to the data
